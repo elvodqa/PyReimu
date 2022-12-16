@@ -85,3 +85,13 @@ class Text(pyreimu.graphics.gui.uielement.UIElement):
             accumulatedHeight += self.font.size(line)[1]
         pygame.display.get_surface().blit(surface, (self.canvas.x + self.position.x, self.canvas.y + self.position.y))
         #return surface
+
+    def set_text(self, text: str):
+        self.string = text
+        self.height = self.font_height * len(self.string.splitlines())
+        self.rect = pygame.rect.Rect(self.position.x, self.position.y, self.width, self.height)
+    
+    def set_font(self, font: pygame.font.Font):
+        self.font = font
+        self.height = self.font_height * len(self.string.splitlines())
+        self.rect = pygame.rect.Rect(self.position.x, self.position.y, self.width, self.height)

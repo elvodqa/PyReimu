@@ -5,8 +5,20 @@ import pygame
 import pyreimu.graphics.gui.canvas
 import pyreimu.graphics.gui.elements
 
+class Dialogue:
+    def __init__(self, text, speaker_name, options = []):
+        self.text = text
+        self.speaker_name = speaker_name
+        self.options = options
+
 class Pyreimu:
     def __init__(self, title):
+        self.state = "main_menu"
+
+        self.current_speaker = None
+        self.dialogue = []
+        self.dialogue_index = 0
+
         pygame.init()
         self.title = title
         pygame.display.set_caption(self.title)
@@ -61,7 +73,7 @@ class Pyreimu:
         self.quit_button.position = pygame.math.Vector2(40, 420)
         self.quit_button.string = "Quit"
 
-        self.bg_image = pyreimu.graphics.gui.elements.image.Image("celeste.png")
+        self.bg_image = pyreimu.graphics.gui.elements.image.Image("shrek.jpeg")
         ratio = self.bg_image.image.get_width() / self.bg_image.image.get_width()
         self.bg_image.image = pygame.transform.scale(self.bg_image.image, (800 * ratio, 600 * ratio))
 
@@ -152,12 +164,58 @@ class Pyreimu:
 
         # ------------------- OPTIONS MENU (END)------------------------
 
+        
+        # ------------------- GAME ------------------------
+        self.dialogue_canvas = pyreimu.graphics.gui.canvas.Canvas()
+        self.dialogue_canvas.x = 75
+        self.dialogue_canvas.width = pygame.display.get_surface().get_width() - 150
+        self.dialogue_canvas.y = pygame.display.get_surface().get_height() - 115
+        self.dialogue_canvas.height = 100
+        self.dialogue_canvas.visible = True
+        self.dialogue_text = pyreimu.graphics.gui.elements.text.Text()
+        self.dialogue_text.string = "...press space to start/continue..."
+        self.dialogue_text.justification = 0
+        #self.dialogue_text.set_font(pygame.font.SysFont("arial", 20))
+        self.dialogue_text.font = pygame.font.SysFont("arial", 20)
+
+        self.speaker_text = pyreimu.graphics.gui.elements.text.Text()
+        self.speaker_text.string = "speaker_text"
+        self.speaker_text.justification = 0
+        self.speaker_text.font = pygame.font.SysFont("arial", 20)
+        #self.speaker_text.position.y = self.dialogue_canvas.y - 20
+        #self.speaker_text.position.x = self.dialogue_canvas.x
+
+        self.dialogue_bg = pyreimu.graphics.gui.elements.panel.Panel()
+        self.dialogue_bg.width = self.dialogue_canvas.width
+        self.dialogue_bg.height = self.dialogue_canvas.height
+        self.dialogue_bg.color = (140, 70, 120, 200)
+        self.dialogue_canvas.add(self.dialogue_bg)
+
+        self.dialogue_text.rect = pygame.Rect(
+            self.dialogue_canvas.x,
+            self.dialogue_canvas.y,
+            self.dialogue_canvas.width,
+            self.dialogue_canvas.height
+        )
+
+        self.speaker_text.rect = pygame.Rect(  
+            self.speaker_text.position.x,
+            self.speaker_text.position.y,
+            self.speaker_text.width,
+            self.speaker_text.height
+        )
+
+        self.dialogue_text.position.y += 20
+        self.dialogue_text.fontColour = (255, 255, 255)
+        self.dialogue_canvas.add(self.dialogue_text)
+        self.dialogue_canvas.add(self.speaker_text)
+
 
 
         # ------------------- BUTTON SETUPS ----------------------------
 
         def start_pressed():
-            pass # cock
+            self.state = "game"
         self.start_button.on_press = start_pressed
 
         def load_pressed():
@@ -202,13 +260,49 @@ class Pyreimu:
                     self.menu_canvas.send_mouse_press()
                     self.options_canvas.send_mouse_press()
                     self.load_canvas.send_mouse_press()
+                # space down
+                if event.type == pygame.KEYDOWN and event.key == 32:
+                    match(self.state):
+                        case "main_menu":
+                            pass
+                        case "game":
+                            if self.dialogue_index < len(self.dialogue):
+                                self.dialogue_text.string = self.dialogue[self.dialogue_index].text
+                                self.speaker_text.string = self.dialogue[self.dialogue_index].speaker_name
+                                self.dialogue_index += 1
+                # esc dowmn
+                if event.type == pygame.KEYDOWN and event.key == 27:
+                    match(self.state):
+                        case "main_menu":
+                            pass
+                        case "game":
+                            self.state = "main_menu"
+                            self.dialogue_index = 0
+                            self.dialogue_text.string = "...press space to start/continue..."
+                            self.speaker_text.string = "speaker_text"
+                            
+                                
 
             self.screen.fill(self.clear_color)
-            self.menu_canvas.draw_and_update()
-            self.options_canvas.draw_and_update()
-            self.load_canvas.draw_and_update()
+            match(self.state):
+                case "main_menu":
+                    self.menu_canvas.draw_and_update()
+                    self.options_canvas.draw_and_update()
+                    self.load_canvas.draw_and_update()
+                case "game":
+                    self.dialogue_canvas.draw_and_update()
+                    
 
             pygame.display.flip()
 
         pygame.quit()
         sys.exit(0)
+    
+    def load_save(self, save_number):
+        pass
+
+    def speaker(self, speaker):
+        self.speaker_name = speaker
+
+    def talk(self, text):
+        self.dialogue.append(Dialogue(text, self.speaker_name))

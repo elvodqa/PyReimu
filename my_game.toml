@@ -1,0 +1,10 @@
+[info]
+name = "My Game"
+creator = "Emir"
+release = "1.0.0"
+license = "MIT"
+
+[config]
+window_width = 800
+window_height = 600
+window_title = "My Game"
