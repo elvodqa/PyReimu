@@ -164,7 +164,7 @@ class Pyreimu:
 
         # ------------------- OPTIONS MENU (END)------------------------
 
-        
+
         # ------------------- GAME ------------------------
         self.dialogue_canvas = pyreimu.graphics.gui.canvas.Canvas()
         self.dialogue_canvas.x = 75

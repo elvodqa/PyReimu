@@ -1,6 +1,6 @@
 import pyreimu
 
-game = pyreimu.Pyreimu("Hot Ogre Sex")
+game = pyreimu.Pyreimu("Example Game")
 
 game.speaker("Alice")
 game.talk("Hello, world!")

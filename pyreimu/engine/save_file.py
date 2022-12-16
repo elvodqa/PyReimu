@@ -1,5 +1,6 @@
 
 
+from datetime import date
 import json
 
 
@@ -20,4 +21,5 @@ class Save:
             json.dump(self.data, f, indent=4)
             # save last_index variable
             self.data["last_index"] = current_index
-    
+            # set saved_at variable to current time and date
+            self.data["saved_at"] = date.today().strftime("%d/%m/%Y %H:%M:%S")
