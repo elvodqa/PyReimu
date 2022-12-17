@@ -13,7 +13,7 @@
 
   
 
-PyReimu is a visual novel framework to make prototyping easy.
+PyReimu is a visual novel framework for making prototyping easy.
 
   
 
