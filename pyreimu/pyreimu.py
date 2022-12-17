@@ -13,10 +13,13 @@ class Dialogue:
 class Pyreimu:
     def __init__(self, title):
         self.state = "main_menu"
-
         self.current_speaker = None
         self.dialogue = []
         self.dialogue_index = 0
+        self.dialogue_string_index = 0
+        self.dialogue_string = ""
+        self.updating_dialogue = False
+        self.dialogue_timer = 0
 
         pygame.init()
         self.title = title
@@ -267,9 +270,16 @@ class Pyreimu:
                             pass
                         case "game":
                             if self.dialogue_index < len(self.dialogue):
-                                self.dialogue_text.string = self.dialogue[self.dialogue_index].text
-                                self.speaker_text.string = self.dialogue[self.dialogue_index].speaker_name
-                                self.dialogue_index += 1
+                                self.updating_dialogue = True
+                                if self.dialogue_text.string != self.dialogue[self.dialogue_index].text:
+                                    self.dialogue_text.string = self.dialogue[self.dialogue_index].text
+                                    self.updating_dialogue = False
+                                else:
+                                    self.speaker_text.string = self.dialogue[self.dialogue_index].speaker_name
+                                    self.dialogue_text.string = ""
+                                    self.dialogue_index += 1
+                                    self.dialogue_string_index = 0
+                               
                 # esc dowmn
                 if event.type == pygame.KEYDOWN and event.key == 27:
                     match(self.state):
@@ -300,6 +310,19 @@ class Pyreimu:
                         self.dialogue_text.string = self.dialogue[self.dialogue_index].text
                         self.speaker_text.string = self.dialogue[self.dialogue_index].speaker_name
                         self.state = "game"
+            
+            if self.dialogue_index < len(self.dialogue):
+                if self.updating_dialogue:
+                    self.dialogue_string = self.dialogue[self.dialogue_index].text
+                    self.dialogue_timer += pygame.time.get_ticks() / 1000.0
+                    if self.dialogue_timer > 30:
+                        self.dialogue_text.string += self.dialogue[self.dialogue_index].text[self.dialogue_string_index]
+                        self.dialogue_string_index += 1
+                        self.dialogue_timer = 0
+                    
+
+                if len(self.dialogue_text.string) == len(self.dialogue_string):
+                    self.updating_dialogue = False
                         
 
             self.screen.fill(self.clear_color)
@@ -325,3 +348,4 @@ class Pyreimu:
 
     def talk(self, text):
         self.dialogue.append(Dialogue(text, self.speaker_name))
+
