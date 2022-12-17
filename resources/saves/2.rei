@@ -1,2 +1,2 @@
-last_index = 4
+last_index = 2
 saved_at = "2022-12-17"

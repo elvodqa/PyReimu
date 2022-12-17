@@ -73,7 +73,7 @@ class Pyreimu:
         self.quit_button.position = pygame.math.Vector2(40, 420)
         self.quit_button.string = "Quit"
 
-        self.bg_image = pyreimu.graphics.gui.elements.image.Image("shrek.jpeg")
+        self.bg_image = pyreimu.graphics.gui.elements.image.Image("celeste.png")
         ratio = self.bg_image.image.get_width() / self.bg_image.image.get_width()
         self.bg_image.image = pygame.transform.scale(self.bg_image.image, (800 * ratio, 600 * ratio))
 
@@ -216,6 +216,7 @@ class Pyreimu:
 
         def start_pressed():
             self.state = "game"
+            self.dialogue_index = 0
         self.start_button.on_press = start_pressed
 
         def load_pressed():
@@ -277,11 +278,30 @@ class Pyreimu:
                             pass
                         case "game":
                             self.state = "main_menu"
-                            self.dialogue_index = 0
+                            #self.dialogue_index = 0
                             self.dialogue_text.string = "...press space to start/continue..."
                             self.speaker_text.string = "speaker_text"
-                            
-                                
+                # clicked left
+                if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+                    if self.load_save_column_1.is_clicked():
+                        self.dialogue_index = self.load_save_column_1.save_file.last_index
+                        print(self.dialogue_index)
+                        self.dialogue_text.string = self.dialogue[self.dialogue_index].text
+                        self.speaker_text.string = self.dialogue[self.dialogue_index].speaker_name
+                        self.state = "game"
+                    if self.load_save_column_2.is_clicked():
+                        self.dialogue_index = self.load_save_column_2.save_file.last_index
+                        print(self.dialogue_index)
+                        self.dialogue_text.string = self.dialogue[self.dialogue_index].text
+                        self.speaker_text.string = self.dialogue[self.dialogue_index].speaker_name
+                        self.state = "game"
+                    if self.load_save_column_3.is_clicked():
+                        self.dialogue_index = self.load_save_column_3.save_file.last_index
+                        print(self.dialogue_index)
+                        self.dialogue_text.string = self.dialogue[self.dialogue_index].text
+                        self.speaker_text.string = self.dialogue[self.dialogue_index].speaker_name
+                        self.state = "game"
+                        
 
             self.screen.fill(self.clear_color)
             match(self.state):

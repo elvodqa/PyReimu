@@ -2,6 +2,7 @@ import os
 
 import pygame
 import pyreimu.graphics.gui.uielement
+import pyreimu.engine.save_file
 
 class SaveColumn(pyreimu.graphics.gui.uielement.UIElement):
     def __init__(self, id):
@@ -10,7 +11,9 @@ class SaveColumn(pyreimu.graphics.gui.uielement.UIElement):
         self.color = (230, 230, 255)
         self.rect = pygame.Rect(self.position.x, self.position.y, self.width, self.height)
         if os.path.exists('resources/saves/' + str(self.save_file_id) + '.rei'):
-            self.string = "Click to load\nLast Played: hh:mm mm/dd/yyyy"
+            self.save_file = pyreimu.engine.save_file.Save('resources/saves/' + str(self.save_file_id) + '.rei')
+            self.save_file.load()
+            self.string = r"Click to load save " + str(self.save_file_id) + "\n" + r"(last saved at " + self.save_file.get_time() + r")"
         else:
             self.string = "No save found"
         self.fontColour = (0, 0, 0)
@@ -71,3 +74,17 @@ class SaveColumn(pyreimu.graphics.gui.uielement.UIElement):
                 raise Exception("Invalid justification argument: " + str(self.justification))
             accumulatedHeight += self.font.size(line)[1]
         pygame.display.get_surface().blit(surface, (self.canvas.x + self.position.x + 5, self.canvas.y + self.position.y + 5))
+
+        # if hover change color 
+        if self.rect.collidepoint(pygame.mouse.get_pos()):
+            self.color = (200, 200, 255)
+        else:
+            self.color = (230, 230, 255)
+
+    def is_clicked(self):
+        # if save file exists
+        if os.path.exists('resources/saves/' + str(self.save_file_id) + '.rei'):
+            if self.rect.collidepoint(pygame.mouse.get_pos()):
+                return True
+            else:
+                return False

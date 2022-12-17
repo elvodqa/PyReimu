@@ -1,7 +1,7 @@
 
 
 from datetime import date
-import json
+import toml
 
 
 class Save:
@@ -10,16 +10,23 @@ class Save:
         self.data = {}
     
     def load(self):
+        # get last_index and saved_at variables, from toml file *.rei
         with open(self.path, "r") as f:
-            self.data = json.load(f)
-            # get last_index
+            self.data = toml.load(f)
+            # get last_index variable
             self.last_index = self.data["last_index"]
-        return self.last_index
+            # get saved_at variable
+            self.saved_at = self.data["saved_at"]
 
     def save(self, current_index):
+        # save last_index and saved_at variables, to toml file *.rei
         with open(self.path, "w") as f:
-            json.dump(self.data, f, indent=4)
-            # save last_index variable
-            self.data["last_index"] = current_index
-            # set saved_at variable to current time and date
-            self.data["saved_at"] = date.today().strftime("%d/%m/%Y %H:%M:%S")
+            self.data = {
+                "last_index": current_index,
+                "saved_at": str(date.today())
+            }
+            toml.dump(self.data, f)
+
+
+    def get_time(self):
+        return self.data["saved_at"]
