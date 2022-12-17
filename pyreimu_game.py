@@ -1,5 +1,6 @@
 import pyreimu
 
+
 game = pyreimu.Pyreimu("Example Game")
 
 game.speaker("Alice")

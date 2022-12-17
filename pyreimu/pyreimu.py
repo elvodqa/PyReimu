@@ -1,7 +1,6 @@
 import sys
 from time import time
 import pygame
-
 import pyreimu.graphics.gui.canvas
 import pyreimu.graphics.gui.elements
 
