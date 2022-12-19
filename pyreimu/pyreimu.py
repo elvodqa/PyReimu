@@ -159,8 +159,11 @@ class Pyreimu:
         self.options_text.position.y += 20
         self.options_text.fontColour = (255, 255, 255)
 
+        self.text_speed_slider = pyreimu.graphics.gui.elements.slider.Slider(10, 60, 5, 60)
+
         self.options_canvas.add(self.options_panel)
         self.options_canvas.add(self.options_text)
+        self.options_canvas.add(self.text_speed_slider)
 
         self.options_canvas.visible = False
 
@@ -219,6 +222,7 @@ class Pyreimu:
         def start_pressed():
             self.state = "game"
             self.dialogue_index = 0
+            self.dialogue_string_index = 0
         self.start_button.on_press = start_pressed
 
         def load_pressed():
@@ -287,7 +291,9 @@ class Pyreimu:
                             pass
                         case "game":
                             self.state = "main_menu"
-                            #self.dialogue_index = 0
+                            self.dialogue_index = 0
+                            self.dialogue_string_index = 0
+                            self.updating_dialogue = False
                             self.dialogue_text.string = "...press space to start/continue..."
                             self.speaker_text.string = "speaker_text"
                 # clicked left
@@ -315,7 +321,7 @@ class Pyreimu:
                 if self.updating_dialogue:
                     self.dialogue_string = self.dialogue[self.dialogue_index].text
                     self.dialogue_timer += pygame.time.get_ticks() / 1000.0
-                    if self.dialogue_timer > 30:
+                    if self.dialogue_timer > 10:
                         self.dialogue_text.string += self.dialogue[self.dialogue_index].text[self.dialogue_string_index]
                         self.dialogue_string_index += 1
                         self.dialogue_timer = 0
