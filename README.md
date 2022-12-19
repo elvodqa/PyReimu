@@ -48,6 +48,7 @@ game.run()
 ```
 
 <img src="https://github.com/elvodqa/pyreimu/blob/master/screenshots/example_game.png" width="400"/>
+
 ##  Contributing
 
 Contributions are welcome! Please read the [Contributing Guide](CONTRIBUTING.md) for more information.
