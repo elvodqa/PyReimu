@@ -19,7 +19,7 @@ PyReimu is a visual novel framework for making prototyping easy.
 
 ##  Installing
 
-  PyReimu is avaiable at PyPI.
+  PyReimu is (not yet) avaiable at PyPI.
 ```bash
 pip install pyreimu
 ```
